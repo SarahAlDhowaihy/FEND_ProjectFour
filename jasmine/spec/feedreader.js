@@ -60,7 +60,8 @@ $(function() {
          * hiding/showing of the menu element.
          */
         it('The menu should be hidden by default', function() {
-            expect(document.body.className).toBe("menu-hidden");
+            let isHidden = document.body.classList.contains("menu-hidden");
+            expect(isHidden).toBe(true);
         });
 
         /* Test that ensures the menu changes
@@ -70,10 +71,16 @@ $(function() {
          */
         it('The menu changes when clicked show/hide', function() {
             const menuicon = document.querySelector('.menu-icon-link');
+            //menuState get the value 
+            //false if meun is shown
+            // and true if is hiden
+            let menuState;
             menuicon.click();
-            expect(document.body.className).toBe("");
+            menuState = document.body.classList.contains("menu-hidden");
+            expect(menuState).not.toBe(true);
             menuicon.click();
-            expect(document.body.className).toBe("menu-hidden");
+            menuState = document.body.classList.contains("menu-hidden");
+            expect(menuState).toBe(true);
         });
     });
 
@@ -87,7 +94,7 @@ $(function() {
             loadFeed(0, done);
         });
         it('should be at least a single entry element after call loadFeed()', function(done) {
-            let feedContainer = document.querySelector('.feed');
+            let feedContainer = document.querySelector('.feed .entry');
             expect(feedContainer.children.length).toBeGreaterThan(0);
             done();
         });
@@ -100,12 +107,11 @@ $(function() {
         let firstFeed, secoundFeed;
         beforeEach(function(done) {
             loadFeed(0, function() {
-                firstFeed = document.querySelector('.feed');
-                done();
-            });
-            loadFeed(1, function() {
-                secoundFeed = document.querySelector('.feed');
-                done();
+                firstFeed = document.querySelector('.feed').textContent;
+                loadFeed(1, function() {
+                    secoundFeed = document.querySelector('.feed').textContent;
+                    done();
+                });
             });
         });
         it("The new feed loads should be different", function(done) {
